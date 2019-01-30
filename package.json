@@ -8,7 +8,8 @@
     "build": "tsc",
     "lint-staged": "lint-staged",
     "prepublishOnly": "npm run test && npm run build",
-    "pub": "npm run publish"
+    "pub": "npm run publish",
+    "coverage": "jest --coverage"
   },
   "files": [
     "index.js",
