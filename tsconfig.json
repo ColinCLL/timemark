@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "strict": true,
+    "module": "es6",
+    "target": "es5",
+    "lib": ["es6", "dom"],
+    "sourceMap": false,
+    "jsx": "react",
+    "outDir": "./",
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "rootDirs": ["./src", "./typings"],
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "allowJs": false,
+    "noImplicitThis": false,
+    "experimentalDecorators": true
+  },
+  "include": ["./src", "./typings/"],
+  "typings": "./typings/index.d.ts",
+  "exclude": [
+    "node_modules",
+    "build",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "jest",
+    "src/setupTests.ts",
+    "tslint:latest",
+    "tslint-config-prettier"
+  ]
+}

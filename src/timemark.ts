@@ -1,17 +1,17 @@
 // 时间格式化
-function timeFormat(time, format) {
-  var date = new Date(time);
-  var dateOption = {
+function timeFormat(time: number | Date, format: string) {
+  const date = new Date(time);
+  const dateOption = {
     'M+': date.getMonth() + 1, // 月
     'd+': date.getDate(), // 日
-    'h+': date.getHours() % 12 == 0 ? 12 : date.getHours() % 12, // 12小时制
+    'h+': date.getHours() % 12 === 0 ? 12 : date.getHours() % 12, // 12小时制
     'H+': date.getHours(), // 24 小时制
     'm+': date.getMinutes(), // 分
     's+': date.getSeconds(), // 秒
     'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
     S: date.getMilliseconds(), // 毫秒
   };
-  var week = {
+  const week = {
     '0': '日',
     '1': '一',
     '2': '二',
@@ -30,11 +30,11 @@ function timeFormat(time, format) {
         week[date.getDay() + '']
     );
   }
-  for (var k in dateOption) {
+  for (const k in dateOption) {
     if (new RegExp('(' + k + ')').test(format)) {
       format = format.replace(
         RegExp.$1,
-        RegExp.$1.length == 1
+        RegExp.$1.length === 1
           ? dateOption[k]
           : ('00' + dateOption[k]).substr(('' + dateOption[k]).length)
       );
@@ -43,15 +43,15 @@ function timeFormat(time, format) {
   return format;
 }
 
-var timemark = function timemark(time, marker) {
-  marker = marker || new Date();
-  var timestamp = Date.parse(new Date(time));
+const timeMark = (time: number | Date, marker?: string | number) => {
+  const letMarker = marker || new Date();
+  let timestamp = Date.parse(new Date(time) + '');
   timestamp = Math.floor(timestamp / 86400 / 1000);
-  var markstamp = Date.parse(new Date(marker));
-  markstamp = Math.floor(markstamp / 86400 / 1000);
-  var interval = timestamp - markstamp;
-  var day = interval;
-  var str = void 0;
+  let markStamp = Date.parse(new Date(letMarker) + '');
+  markStamp = Math.floor(markStamp / 86400 / 1000);
+  const interval = timestamp - markStamp;
+  const day = interval;
+  let str;
   if (day === -1) {
     str = '昨天';
   } else if (day === 0) {
@@ -68,4 +68,4 @@ var timemark = function timemark(time, marker) {
   return str;
 };
 
-module.exports = timemark;
+export default timeMark;
