@@ -1,7 +1,7 @@
 // 时间格式化
 function timeFormat(time, format) {
-  let date = new Date(time);
-  let dateOption = {
+  var date = new Date(time);
+  var dateOption = {
     'M+': date.getMonth() + 1, // 月
     'd+': date.getDate(), // 日
     'h+': date.getHours() % 12 == 0 ? 12 : date.getHours() % 12, // 12小时制
@@ -11,7 +11,7 @@ function timeFormat(time, format) {
     'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
     S: date.getMilliseconds(), // 毫秒
   };
-  let week = {
+  var week = {
     '0': '日',
     '1': '一',
     '2': '二',
@@ -30,7 +30,7 @@ function timeFormat(time, format) {
         week[date.getDay() + '']
     );
   }
-  for (let k in dateOption) {
+  for (var k in dateOption) {
     if (new RegExp('(' + k + ')').test(format)) {
       format = format.replace(
         RegExp.$1,
@@ -43,15 +43,16 @@ function timeFormat(time, format) {
   return format;
 }
 
-let timemark = function(time, mark) {
+var timemark = function timemark(time, mark) {
   mark = mark || new Date();
-  let timestamp = Date.parse(new Date(time));
+
+  var timestamp = Date.parse(new Date(time));
   timestamp = Math.floor(timestamp / 86400 / 1000) * 86400;
-  let markstamp = Date.parse(new Date(mark));
+  var markstamp = Date.parse(new Date(mark));
   markstamp = Math.floor(markstamp / 86400 / 1000) * 86400;
-  let interval = timestamp - markstamp;
-  let day = interval / 86400;
-  let str;
+  var interval = timestamp - markstamp;
+  var day = interval / 86400;
+  var str = void 0;
   if (day === -1) {
     str = '昨天';
   } else if (day === 0) {
