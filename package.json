@@ -1,11 +1,12 @@
 {
-  "name": "easycharts",
+  "name": "timemark",
   "version": "0.0.0",
   "description": "",
-  "main": "easycharts.js",
+  "main": "index.js",
   "scripts": {
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha",
-    "babel": "babel easycharts.js -o ./build/easycharts.js"
+    "babel": "babel ./src/timemark.js -o ./index.js",
+    "lint-staged": "lint-staged"
   },
   "author": "",
   "license": "MIT",
@@ -17,13 +18,25 @@
     "gulp-babel": "^7.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.0",
     "gulp-webserver": "^0.9.1",
     "istanbul": "^0.4.5",
+    "lint-staged": "^8.1.0",
     "mocha": "^4.0.1",
-    "should": "^13.1.3"
+    "prettier": "^1.16.1",
+    "should": "^13.1.3",
+    "husky": "^1.3.1"
   },
-  "dependencies": {
-    "gulp-sourcemaps": "^2.6.4"
+  "lint-staged": {
+    "**/*.{js,ts,json}": [
+      "node ./scripts/lint-prettier.js",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint-staged"
+    }
   }
 }
