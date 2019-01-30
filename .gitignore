@@ -5,3 +5,5 @@ package-lock.json
 yarn*
 
 /timemark.*
+index.d.ts
+index.js
