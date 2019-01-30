@@ -10,6 +10,10 @@
     "prepublishOnly": "npm run test && npm run build",
     "pub": "npm run publish"
   },
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
   "author": "https://github.com/ColinCLL",
   "license": "MIT",
   "devDependencies": {

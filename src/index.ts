@@ -46,6 +46,7 @@ function timeFormat(time: number | Date, format: string) {
 const timeMark = (time: number | Date, marker?: string | number) => {
   const letMarker = marker || new Date();
   let timestamp = Date.parse(new Date(time) + '');
+
   timestamp = Math.floor(timestamp / 86400 / 1000);
   let markStamp = Date.parse(new Date(letMarker) + '');
   markStamp = Math.floor(markStamp / 86400 / 1000);

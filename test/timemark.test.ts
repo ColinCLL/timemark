@@ -1,10 +1,27 @@
-import timemark from '../src/timemark';
+import timemark from '../src/index';
 
 describe('test timemark', () => {
   it('test new Data', () => {
     const time = new Date();
     const data = timemark(time);
     expect(data).toBe('今天');
+  });
+
+  it('test Date is null', () => {
+    const name: any = 'dadad';
+    const data = timemark(name);
+    expect(data).toBe('NaN-aN-aN');
+  });
+
+  it('test Date is 0', () => {
+    const data = timemark(0);
+    expect(data).toBe('1970-01-01');
+  });
+
+  it('test Date is string', () => {
+    const name: any = '2009-10-20';
+    const data = timemark(name);
+    expect(data).toBe('2009-10-20');
   });
 
   it('test time list', () => {
