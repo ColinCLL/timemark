@@ -43,14 +43,14 @@ function timeFormat(time, format) {
   return format;
 }
 
-let timemark = function(time, mark) {
-  mark = mark || new Date();
+let timemark = function(time, marker) {
+  marker = marker || new Date();
   let timestamp = Date.parse(new Date(time));
-  timestamp = Math.floor(timestamp / 86400 / 1000) * 86400;
-  let markstamp = Date.parse(new Date(mark));
-  markstamp = Math.floor(markstamp / 86400 / 1000) * 86400;
+  timestamp = Math.floor(timestamp / 86400 / 1000);
+  let markstamp = Date.parse(new Date(marker));
+  markstamp = Math.floor(markstamp / 86400 / 1000);
   let interval = timestamp - markstamp;
-  let day = interval / 86400;
+  let day = interval;
   let str;
   if (day === -1) {
     str = '昨天';

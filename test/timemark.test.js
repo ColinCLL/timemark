@@ -21,8 +21,8 @@ describe('test timemark', function() {
   it('test time over limit', function() {
     var time = Date.parse(new Date(1548826417000));
     var timeList = [];
-    timeList.push(timemark(time + -2 * 86400 * 1000), new Date(1548826417000));
-    timeList.push(timemark(time + 8 * 86400 * 1000), new Date(1548826417000));
+    timeList.push(timemark(time + -2 * 86400 * 1000, 1548826417000));
+    timeList.push(timemark(time + 8 * 86400 * 1000, 1548826417000));
     timeList.should.deepEqual(['2019-01-28', '2019-02-07']);
   });
 });

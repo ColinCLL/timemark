@@ -13,8 +13,10 @@ gulp.task('script', function() {
       // .pipe(concat("./dist/timemark.js"))
       // .pipe(ts()) // ts
       .pipe(babel()) // babel
-      // .pipe(uglify({})) // 使用uglify进行压缩
       .pipe(rename('./dist/timemark.js'))
+      .pipe(gulp.dest('./'))
+      .pipe(uglify({})) // 使用uglify进行压缩
+      .pipe(rename('./dist/timemark.min.js'))
       // .pipe(sourcemaps.write()) // 输出 .map 文件
       .pipe(gulp.dest('./'))
   ); // 输出路径
