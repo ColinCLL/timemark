@@ -43,13 +43,13 @@ function timeFormat(time, format) {
   return format;
 }
 
-let timemark = function(time, marker) {
+let timeMark = function(time, marker) {
   marker = marker || new Date();
   let timestamp = Date.parse(new Date(time));
   timestamp = Math.floor(timestamp / 86400 / 1000);
-  let markstamp = Date.parse(new Date(marker));
-  markstamp = Math.floor(markstamp / 86400 / 1000);
-  let interval = timestamp - markstamp;
+  let markStamp = Date.parse(new Date(marker));
+  markStamp = Math.floor(markStamp / 86400 / 1000);
+  let interval = timestamp - markStamp;
   let day = interval;
   let str;
   if (day === -1) {
@@ -68,4 +68,4 @@ let timemark = function(time, marker) {
   return str;
 };
 
-module.exports = timemark;
+module.exports = timeMark;
