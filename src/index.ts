@@ -51,7 +51,7 @@ const isNextWeek = (timeDay: Date, markDay: Date) => {
   }
 };
 
-const getDate = (time: Date | number, day: number, weekPrefix: string) => {
+const getDateMark = (time: Date | number, day: number, weekPrefix: string) => {
   if (day === -1) {
     return '昨天';
   } else if (day === 0) {
@@ -75,7 +75,7 @@ const timeMark = (time: number | Date, marker?: string | number) => {
   timestamp = Date.parse(timestamp + '');
   markStamp = Date.parse(markStamp + '');
   const day = Math.floor(timestamp / 86400 / 1000) - Math.floor(markStamp / 86400 / 1000);
-  return getDate(time, day, weekPrefix);
+  return getDateMark(time, day, weekPrefix);
 };
 
 export default timeMark;
