@@ -70,7 +70,7 @@ const timeMark = (time: number | Date, marker?: string | number) => {
   } else if (day === 2) {
     str = '后天';
   } else if (day <= 7 && day > 2) {
-    str = timeFormat(time, weekPrefix + 'EE');
+    str = timeFormat(time, `${weekPrefix}EE`);
   } else {
     str = timeFormat(time, 'yyyy-MM-dd');
   }
