@@ -1,5 +1,5 @@
 // 时间格式化
-const timeFormat = (time: number | Date, format: string) => {
+const timeFormat = (time: number | Date, format: string): string => {
   const date = new Date(time);
   const dateOption = {
     'M+': date.getMonth() + 1, // 月
@@ -43,35 +43,41 @@ const timeFormat = (time: number | Date, format: string) => {
   return format;
 };
 
-const isNextWeek = (timeDay: Date, markDay: Date) => {
+const getWeekPrefix = (timeDay: Date, markDay: Date): string => {
   if (markDay.getDay() === 0 || (timeDay.getDay() < markDay.getDay() && timeDay.getDay() !== 0)) {
-    return true;
+    return '下';
   } else {
-    return false;
+    return '';
   }
 };
 
-const getTimeMark = (time: Date | number, day: number, weekPrefix: string) => {
+const getTimeMark = (time: Date | number, day: number, weekPrefix: string): string => {
   if (day === -1) {
     return '昨天';
-  } else if (day === 0) {
+  }
+  if (day === 0) {
     return '今天';
-  } else if (day === 1) {
+  }
+  if (day === 1) {
     return '明天';
-  } else if (day === 2) {
+  }
+  if (day === 2) {
     return '后天';
-  } else if (day <= 7 && day > 2) {
+  }
+  if (day <= 7 && day > 2) {
     return timeFormat(time, `${weekPrefix}EE`);
-  } else {
+  }
+  if (day > 7 || day < -1) {
     return timeFormat(time, 'yyyy-MM-dd');
   }
+  return '';
 };
 
-const timeMark = (time: number | Date, marker?: string | number) => {
+const timeMark = (time: number | Date, marker?: string | number): string => {
   const letMarker = marker || new Date();
   let timestamp: number | Date = new Date(time);
   let markStamp: number | Date = new Date(letMarker);
-  const weekPrefix = isNextWeek(timestamp, markStamp) ? '下' : '';
+  const weekPrefix = getWeekPrefix(timestamp, markStamp);
   timestamp = Date.parse(timestamp + '');
   markStamp = Date.parse(markStamp + '');
   const day = Math.floor(timestamp / 86400 / 1000) - Math.floor(markStamp / 86400 / 1000);
