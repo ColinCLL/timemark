@@ -1,81 +1,117 @@
-// 时间格式化
-function timeFormat(time: number | Date, format: string) {
-  const date = new Date(time);
-  const dateOption = {
-    'M+': date.getMonth() + 1, // 月
-    'd+': date.getDate(), // 日
-    'h+': date.getHours() % 12 === 0 ? 12 : date.getHours() % 12, // 12小时制
-    'H+': date.getHours(), // 24 小时制
-    'm+': date.getMinutes(), // 分
-    's+': date.getSeconds(), // 秒
-    'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
-    S: date.getMilliseconds(), // 毫秒
-  };
-  const week = {
-    '0': '日',
-    '1': '一',
-    '2': '二',
-    '3': '三',
-    '4': '四',
-    '5': '五',
-    '6': '六',
-  };
-  if (/(y+)/.test(format)) {
-    format = format.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
-  }
-  if (/(E+)/.test(format)) {
-    format = format.replace(
-      RegExp.$1,
-      (RegExp.$1.length > 1 ? (RegExp.$1.length > 2 ? '星期' : '周') : '') +
-        week[date.getDay() + '']
-    );
-  }
-  for (const k in dateOption) {
-    if (new RegExp('(' + k + ')').test(format)) {
-      format = format.replace(
-        RegExp.$1,
-        RegExp.$1.length === 1
-          ? dateOption[k]
-          : ('00' + dateOption[k]).substr(('' + dateOption[k]).length)
-      );
-    }
-  }
-  return format;
-}
+// * ================================================================================ helper
 
-const timeMark = (time: number | Date, marker?: string | number) => {
-  let str,
-    isNextWeek = '';
-  const letMarker = marker || new Date();
-  let timestamp: number | Date = new Date(time);
-  let markStamp: number | Date = new Date(letMarker);
+// * ---------------- num-Chinese mapper
 
-  if (
-    markStamp.getDay() === 0 ||
-    (timestamp.getDay() < markStamp.getDay() && timestamp.getDay() !== 0)
-  ) {
-    isNextWeek = '下';
-  }
-
-  timestamp = Date.parse(timestamp + '');
-  markStamp = Date.parse(markStamp + '');
-
-  const day = Math.floor(timestamp / 86400 / 1000) - Math.floor(markStamp / 86400 / 1000);
-
-  if (day === -1) {
-    str = '昨天';
-  } else if (day === 0) {
-    str = '今天';
-  } else if (day === 1) {
-    str = '明天';
-  } else if (day === 2) {
-    str = '后天';
-  } else if (day <= 7 && day > 2) {
-    str = timeFormat(time, isNextWeek + 'EE');
-  } else {
-    str = timeFormat(time, 'yyyy-MM-dd');
-  }
-  return str;
+// * manually configable
+const nearDayMap: { [index: string]: string } = {
+  // '-3': '大前天',
+  // '-2': '前天',
+  '-1': '昨天',
+  '0': '今天',
+  '1': '明天',
+  '2': '后天',
+  // '3': '大后天',
 };
 
-export default timeMark;
+const weekdayMap: { [index: string]: string } = {
+  '1': '一',
+  '2': '二',
+  '3': '三',
+  '4': '四',
+  '5': '五',
+  '6': '六',
+  '7': '日',
+};
+
+// * ---------------- helper
+
+// * get day count from Date(0), while in China its necessary to add 8 hour
+const getDayCount = (stamp: number): number => Math.floor((stamp + 8 * 3600 * 1000) / 86400 / 1000);
+
+// * ================================================================================ simple calc
+
+// * ---------------- getNearDay
+
+// TODO make range configable // seognil LC 2019/02/01
+const getNearDay = (delta: number): string | void => nearDayMap[delta];
+
+// * ---------------- getNearWeek
+
+// TODO make display range configable // seognil LC 2019/02/01
+// TODO support Sunday ~ Saturday // seognil LC 2019/02/01
+// * current week is Monday ~ Sunday
+const getNearWeek = (delta: number, endWeekday: number): string | void => {
+  endWeekday = endWeekday === 0 ? 7 : endWeekday;
+  const shouldDisplay = 2 < delta && delta < 7;
+
+  const rawStart = endWeekday - delta;
+  const shouldMap = -6 <= rawStart && rawStart <= 14;
+
+  let weekPrefix = '';
+  if (rawStart <= 0) {
+    weekPrefix = '下';
+  } else if (8 <= rawStart) {
+    weekPrefix = '上';
+  }
+
+  return shouldMap && shouldDisplay ? `${weekPrefix}周${weekdayMap[endWeekday]}` : undefined;
+};
+
+// * ---------------- simpleFormat
+
+// * formatter pattern see https://momentjs.com/docs/#/displaying/format/
+// * if need much more complicated formatting, import other tool such as moment.js
+
+// * YYYY-MM-DD
+const simpleFormat = (date: Date): string =>
+  [
+    date.getFullYear(),
+    ('00' + (date.getMonth() + 1)).slice(-2),
+    ('00' + date.getDate()).slice(-2),
+  ].join('-');
+
+// * ================================================================================ getTimeMark core function
+
+// TODO version 2 would breaking change add more option // seognil LC 2019/02/01
+// const getTimeMark = (
+//   endDate: string | number | Date = new Date(),
+//   options: {
+//     startDate: string | number | Date;
+//     format: string;
+//   } = {
+//     startDate: new Date(),
+//     format: 'YYYY-MM-DD',
+//   },
+// ) => {}
+
+// * -------------------------------- getTimeMark
+
+const getTimeMark = (
+  endDate: string | number | Date = new Date(),
+  startDate: string | number | Date = new Date()
+) => {
+  // * ---------------- data preparation
+
+  // ? if with invalid param, maybe would parse failed here
+  endDate = new Date(endDate);
+  startDate = new Date(startDate);
+
+  const endWeekday = endDate.getDay();
+  // const startWeekday = startDate.getDay();
+
+  const deltaDay = getDayCount(endDate.getTime()) - getDayCount(startDate.getTime());
+
+  // * ---------------- resulting
+
+  // * try in order, break in half while get a very first valid result
+  const result = getNearDay(deltaDay) || getNearWeek(deltaDay, endWeekday) || simpleFormat(endDate);
+
+  if (!result) {
+    // ! if still cant get a valid result
+    // * return an error information or debug the methods
+  }
+
+  return result;
+};
+
+export default getTimeMark;
