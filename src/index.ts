@@ -50,9 +50,11 @@ const getNearWeek = (delta: number, endWeekday: number): string | void => {
   let weekPrefix = '';
   if (rawStart <= 0) {
     weekPrefix = '下';
-  } else if (8 <= rawStart) {
-    weekPrefix = '上';
   }
+  // * not in range now
+  // else if (8 <= rawStart) {
+    // weekPrefix = '上';
+  // }
 
   return shouldMap && shouldDisplay ? `${weekPrefix}周${weekdayMap[endWeekday]}` : undefined;
 };
@@ -106,10 +108,10 @@ const getTimeMark = (
   // * try in order, break in half while get a very first valid result
   const result = getNearDay(deltaDay) || getNearWeek(deltaDay, endWeekday) || simpleFormat(endDate);
 
-  if (!result) {
-    // ! if still cant get a valid result
+  // ! catch empty result here
+  // if (!result) {
     // * return an error information or debug the methods
-  }
+  // }
 
   return result;
 };
