@@ -1,5 +1,8 @@
 // * ================================================================================ helper
 
+type DateType = string | number | Date;
+type MarkResultType = string | null;
+
 // * ---------------- num-Chinese mapper
 
 // * manually configable
@@ -26,21 +29,35 @@ const weekdayMap: { [index: string]: string } = {
 // * ---------------- helper
 
 // * get day count from Date(0), while in China its necessary to add 8 hour
-const getDayCount = (stamp: number): number => Math.floor((stamp + 8 * 3600 * 1000) / 86400 / 1000);
+const getDayCount = (stamp: number): number =>
+  Math.floor((stamp + 8 * 3600 * 1000) / 86400 / 1000);
+
+// * also support number, ES8 String.prototype.padStart()
+const padStart = (
+  str: number | string,
+  targetLength: number,
+  padString: string
+): string => {
+  str = String(str);
+  while (str.length < targetLength) {
+    str = padString + str;
+  }
+  return str;
+};
 
 // * ================================================================================ simple calc
 
 // * ---------------- getNearDay
 
 // TODO make range configable // seognil LC 2019/02/01
-const getNearDay = (delta: number): string | void => nearDayMap[delta];
+const getNearDay = (delta: number): MarkResultType => nearDayMap[delta] || null;
 
 // * ---------------- getNearWeek
 
 // TODO make display range configable // seognil LC 2019/02/01
 // TODO support Sunday ~ Saturday // seognil LC 2019/02/01
 // * current week is Monday ~ Sunday
-const getNearWeek = (delta: number, endWeekday: number): string | void => {
+const getNearWeek = (delta: number, endWeekday: number): MarkResultType => {
   endWeekday = endWeekday === 0 ? 7 : endWeekday;
   const shouldDisplay = 2 < delta && delta < 7;
 
@@ -53,10 +70,12 @@ const getNearWeek = (delta: number, endWeekday: number): string | void => {
   }
   // * not in range now
   // else if (8 <= rawStart) {
-    // weekPrefix = '上';
+  // weekPrefix = '上';
   // }
 
-  return shouldMap && shouldDisplay ? `${weekPrefix}周${weekdayMap[endWeekday]}` : undefined;
+  return shouldMap && shouldDisplay
+    ? `${weekPrefix}周${weekdayMap[endWeekday]}`
+    : null;
 };
 
 // * ---------------- simpleFormat
@@ -68,17 +87,17 @@ const getNearWeek = (delta: number, endWeekday: number): string | void => {
 const simpleFormat = (date: Date): string =>
   [
     date.getFullYear(),
-    ('00' + (date.getMonth() + 1)).slice(-2),
-    ('00' + date.getDate()).slice(-2),
+    padStart(date.getMonth() + 1, 2, '0'),
+    padStart(date.getDate(), 2, '0'),
   ].join('-');
 
 // * ================================================================================ getTimeMark core function
 
 // TODO version 2 would breaking change add more option // seognil LC 2019/02/01
 // const getTimeMark = (
-//   endDate: string | number | Date = new Date(),
+//   endDate: DateType = new Date(),
 //   options: {
-//     startDate: string | number | Date;
+//     startDate: DateType;
 //     format: string;
 //   } = {
 //     startDate: new Date(),
@@ -89,9 +108,9 @@ const simpleFormat = (date: Date): string =>
 // * -------------------------------- getTimeMark
 
 const getTimeMark = (
-  endDate: string | number | Date = new Date(),
-  startDate: string | number | Date = new Date()
-) => {
+  endDate: DateType = new Date(),
+  startDate: DateType = new Date()
+): string => {
   // * ---------------- data preparation
 
   // ? if with invalid param, maybe would parse failed here
@@ -101,16 +120,20 @@ const getTimeMark = (
   const endWeekday = endDate.getDay();
   // const startWeekday = startDate.getDay();
 
-  const deltaDay = getDayCount(endDate.getTime()) - getDayCount(startDate.getTime());
+  const deltaDay =
+    getDayCount(endDate.getTime()) - getDayCount(startDate.getTime());
 
   // * ---------------- resulting
 
-  // * try in order, break in half while get a very first valid result
-  const result = getNearDay(deltaDay) || getNearWeek(deltaDay, endWeekday) || simpleFormat(endDate);
+  // * short-circuit-evaluation here
+  const result =
+    getNearDay(deltaDay) ||
+    getNearWeek(deltaDay, endWeekday) ||
+    simpleFormat(endDate);
 
   // ! catch empty result here
   // if (!result) {
-    // * return an error information or debug the methods
+  // * return an error information or debug the methods
   // }
 
   return result;

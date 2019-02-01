@@ -10,7 +10,7 @@ describe('test timemark', () => {
   it('test Date is null', () => {
     const name: any = 'dadad';
     const data = timemark(name);
-    expect(data).toBe('NaN-aN-aN');
+    expect(data).toBe('NaN-NaN-NaN');
   });
 
   it('test Date is 0', () => {
