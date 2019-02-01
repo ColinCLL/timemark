@@ -51,8 +51,23 @@ const isNextWeek = (timeDay: Date, markDay: Date) => {
   }
 };
 
+const getDate = (time: Date | number, day: number, weekPrefix: string) => {
+  if (day === -1) {
+    return '昨天';
+  } else if (day === 0) {
+    return '今天';
+  } else if (day === 1) {
+    return '明天';
+  } else if (day === 2) {
+    return '后天';
+  } else if (day <= 7 && day > 2) {
+    return timeFormat(time, `${weekPrefix}EE`);
+  } else {
+    return timeFormat(time, 'yyyy-MM-dd');
+  }
+};
+
 const timeMark = (time: number | Date, marker?: string | number) => {
-  let str;
   const letMarker = marker || new Date();
   let timestamp: number | Date = new Date(time);
   let markStamp: number | Date = new Date(letMarker);
@@ -60,21 +75,7 @@ const timeMark = (time: number | Date, marker?: string | number) => {
   timestamp = Date.parse(timestamp + '');
   markStamp = Date.parse(markStamp + '');
   const day = Math.floor(timestamp / 86400 / 1000) - Math.floor(markStamp / 86400 / 1000);
-
-  if (day === -1) {
-    str = '昨天';
-  } else if (day === 0) {
-    str = '今天';
-  } else if (day === 1) {
-    str = '明天';
-  } else if (day === 2) {
-    str = '后天';
-  } else if (day <= 7 && day > 2) {
-    str = timeFormat(time, `${weekPrefix}EE`);
-  } else {
-    str = timeFormat(time, 'yyyy-MM-dd');
-  }
-  return str;
+  return getDate(time, day, weekPrefix);
 };
 
 export default timeMark;
