@@ -46,7 +46,7 @@ console.log(mark2); // -> '昨天'
 try these in order
 
 * closest days `'昨天', '今天', '明天', '后天'`  
-  current range is delta from startDay in `-1 ~ 3`  
+  current range is delta from startDay in `-1 ~ 2`  
   configurable only in source code
 
 * little futher days `'周六', '下周一'`  
