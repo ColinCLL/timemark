@@ -1,5 +1,5 @@
 // 时间格式化
-function timeFormat(time: number | Date, format: string) {
+const timeFormat = (time: number | Date, format: string) => {
   const date = new Date(time);
   const dateOption = {
     'M+': date.getMonth() + 1, // 月
@@ -41,25 +41,24 @@ function timeFormat(time: number | Date, format: string) {
     }
   }
   return format;
-}
+};
+
+const isNextWeek = (timeDay: Date, markDay: Date) => {
+  if (markDay.getDay() === 0 || (timeDay.getDay() < markDay.getDay() && timeDay.getDay() !== 0)) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 const timeMark = (time: number | Date, marker?: string | number) => {
-  let str,
-    isNextWeek = '';
+  let str;
   const letMarker = marker || new Date();
   let timestamp: number | Date = new Date(time);
   let markStamp: number | Date = new Date(letMarker);
-
-  if (
-    markStamp.getDay() === 0 ||
-    (timestamp.getDay() < markStamp.getDay() && timestamp.getDay() !== 0)
-  ) {
-    isNextWeek = '下';
-  }
-
+  const weekPrefix = isNextWeek(timestamp, markStamp) ? '下' : '';
   timestamp = Date.parse(timestamp + '');
   markStamp = Date.parse(markStamp + '');
-
   const day = Math.floor(timestamp / 86400 / 1000) - Math.floor(markStamp / 86400 / 1000);
 
   if (day === -1) {
@@ -71,7 +70,7 @@ const timeMark = (time: number | Date, marker?: string | number) => {
   } else if (day === 2) {
     str = '后天';
   } else if (day <= 7 && day > 2) {
-    str = timeFormat(time, isNextWeek + 'EE');
+    str = timeFormat(time, weekPrefix + 'EE');
   } else {
     str = timeFormat(time, 'yyyy-MM-dd');
   }
