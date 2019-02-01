@@ -44,11 +44,24 @@ function timeFormat(time: number | Date, format: string) {
 }
 
 const timeMark = (time: number | Date, marker?: string | number) => {
+  let str,
+    isNextWeek = '';
   const letMarker = marker || new Date();
-  const timestamp = Date.parse(new Date(time) + '');
-  const markStamp = Date.parse(new Date(letMarker) + '');
+  let timestamp: number | Date = new Date(time);
+  let markStamp: number | Date = new Date(letMarker);
+
+  if (
+    markStamp.getDay() === 0 ||
+    (timestamp.getDay() < markStamp.getDay() && timestamp.getDay() !== 0)
+  ) {
+    isNextWeek = '下';
+  }
+
+  timestamp = Date.parse(timestamp + '');
+  markStamp = Date.parse(markStamp + '');
+
   const day = Math.floor(timestamp / 86400 / 1000) - Math.floor(markStamp / 86400 / 1000);
-  let str;
+
   if (day === -1) {
     str = '昨天';
   } else if (day === 0) {
@@ -58,7 +71,7 @@ const timeMark = (time: number | Date, marker?: string | number) => {
   } else if (day === 2) {
     str = '后天';
   } else if (day <= 7 && day > 2) {
-    str = timeFormat(time, 'EE');
+    str = timeFormat(time, isNextWeek + 'EE');
   } else {
     str = timeFormat(time, 'yyyy-MM-dd');
   }

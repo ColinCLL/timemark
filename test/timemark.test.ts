@@ -31,7 +31,7 @@ describe('test timemark', () => {
       const date = time + (i - 1) * (86400 * 1000);
       timeList.push(timemark(date, 1548826417000));
     });
-    expect(timeList).toEqual(['昨天', '今天', '明天', '后天', '周六', '周日', '周一', '周二']);
+    expect(timeList).toEqual(['昨天', '今天', '明天', '后天', '周六', '周日', '下周一', '下周二']);
   });
 
   it('test time over limit', () => {
