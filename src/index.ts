@@ -1,7 +1,6 @@
 // * ================================================================================ helper
 
 type DateType = string | number | Date;
-type MarkResultType = string | null;
 
 // * ---------------- num-Chinese mapper
 
@@ -29,15 +28,10 @@ const weekdayMap: { [index: string]: string } = {
 // * ---------------- helper
 
 // * get day count from Date(0), while in China its necessary to add 8 hour
-const getDayCount = (stamp: number): number =>
-  Math.floor((stamp + 8 * 3600 * 1000) / 86400 / 1000);
+const getDayCount = (stamp: number): number => Math.floor((stamp + 8 * 3600 * 1000) / 86400 / 1000);
 
 // * also support number, ES8 String.prototype.padStart()
-const padStart = (
-  str: number | string,
-  targetLength: number,
-  padString: string
-): string => {
+const padStart = (str: number | string, targetLength: number, padString: string): string => {
   str = String(str);
   while (str.length < targetLength) {
     str = padString + str;
@@ -49,33 +43,27 @@ const padStart = (
 
 // * ---------------- getNearDay
 
-// TODO make range configable // seognil LC 2019/02/01
-const getNearDay = (delta: number): MarkResultType => nearDayMap[delta] || null;
+const getNearDay = (delta: number): string => nearDayMap[delta];
 
 // * ---------------- getNearWeek
 
-// TODO make display range configable // seognil LC 2019/02/01
 // TODO support Sunday ~ Saturday // seognil LC 2019/02/01
 // * current week is Monday ~ Sunday
-const getNearWeek = (delta: number, endWeekday: number): MarkResultType => {
+const getNearWeek = (delta: number, endWeekday: number): string => {
   endWeekday = endWeekday === 0 ? 7 : endWeekday;
-  const shouldDisplay = 2 < delta && delta < 7;
 
   const rawStart = endWeekday - delta;
-  const shouldMap = -6 <= rawStart && rawStart <= 14;
 
   let weekPrefix = '';
   if (rawStart <= 0) {
     weekPrefix = '下';
   }
-  // * not in range now
+  // * not necessary by current range
   // else if (8 <= rawStart) {
   // weekPrefix = '上';
   // }
 
-  return shouldMap && shouldDisplay
-    ? `${weekPrefix}周${weekdayMap[endWeekday]}`
-    : null;
+  return `${weekPrefix}周${weekdayMap[endWeekday]}`;
 };
 
 // * ---------------- simpleFormat
@@ -107,10 +95,7 @@ const simpleFormat = (date: Date): string =>
 
 // * -------------------------------- getTimeMark
 
-const getTimeMark = (
-  endDate: DateType = new Date(),
-  startDate: DateType = new Date()
-): string => {
+const getTimeMark = (endDate: DateType = new Date(), startDate: DateType = new Date()): string => {
   // * ---------------- data preparation
 
   // ? if with invalid param, maybe would parse failed here
@@ -120,16 +105,18 @@ const getTimeMark = (
   const endWeekday = endDate.getDay();
   // const startWeekday = startDate.getDay();
 
-  const deltaDay =
-    getDayCount(endDate.getTime()) - getDayCount(startDate.getTime());
+  const deltaDay = getDayCount(endDate.getTime()) - getDayCount(startDate.getTime());
 
   // * ---------------- resulting
 
-  // * short-circuit-evaluation here
-  const result =
-    getNearDay(deltaDay) ||
-    getNearWeek(deltaDay, endWeekday) ||
-    simpleFormat(endDate);
+  let result;
+  if (-1 <= deltaDay && deltaDay <= 2) {
+    result = getNearDay(deltaDay);
+  } else if (3 <= deltaDay && deltaDay <= 6) {
+    result = getNearWeek(deltaDay, endWeekday);
+  } else {
+    result = simpleFormat(endDate);
+  }
 
   // ! catch empty result here
   // if (!result) {

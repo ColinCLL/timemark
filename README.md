@@ -43,17 +43,20 @@ console.log(mark2); // -> '昨天'
 
 ## Rule
 
-try these in order
+Calculate the `delta` of endDay to startDay.
+The mark will fall into one of these methods by delta range.
+
 
 * closest days `'昨天', '今天', '明天', '后天'`  
-  current range is delta from startDay in `-1 ~ 2`  
+  current range is `[-1, 2]`  
   configurable only in source code
 
 * little futher days `'周六', '下周一'`  
-  current range is delta from startDay in `-1 ~ 6`  
+  current range is delta from startDay in `[3, 6]`  
   configurable only in source code
 
-* simple formatter by pattern `'YYYY-MM-DD'`, such as `'2019-02-03'`  
+* others  
+  simple formatter by pattern `'YYYY-MM-DD'`, such as `'2019-02-03'`  
   if you want more, try `moment.js`.
 
 
