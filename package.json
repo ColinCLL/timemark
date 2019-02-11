@@ -1,6 +1,6 @@
 {
   "name": "timemark",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a tool for humanizing time",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "build": "tsc",
     "lint-staged": "lint-staged",
     "prepublishOnly": "npm run test && npm run build",
-    "pub": "npm run publish",
+    "pub": "npm publish",
     "coverage": "jest --coverage"
   },
   "files": [
