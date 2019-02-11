@@ -109,21 +109,16 @@ const getTimeMark = (endDate: DateType = new Date(), startDate: DateType = new D
 
   // * ---------------- resulting
 
-  let result;
   if (-1 <= deltaDay && deltaDay <= 2) {
-    result = getNearDay(deltaDay);
+    return getNearDay(deltaDay);
   } else if (3 <= deltaDay && deltaDay <= 6) {
-    result = getNearWeek(deltaDay, endWeekday);
-  } else {
-    result = simpleFormat(endDate);
+    return getNearWeek(deltaDay, endWeekday);
   }
-
   // ! catch empty result here
   // if (!result) {
   // * return an error information or debug the methods
   // }
-
-  return result;
+  return simpleFormat(endDate);
 };
 
 export default getTimeMark;
