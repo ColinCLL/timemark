@@ -3,7 +3,7 @@
     "declaration": true,
     "strict": true,
     "module": "es6",
-    "target": "es5",
+    "target": "es3",
     "lib": ["es6", "dom"],
     "sourceMap": false,
     "jsx": "react",

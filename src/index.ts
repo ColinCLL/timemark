@@ -73,11 +73,7 @@ const getNearWeek = (delta: number, endWeekday: number): string => {
 
 // * YYYY-MM-DD
 const simpleFormat = (date: Date): string =>
-  [
-    date.getFullYear(),
-    padStart(date.getMonth() + 1, 2, '0'),
-    padStart(date.getDate(), 2, '0'),
-  ].join('-');
+  [padStart(date.getMonth() + 1, 2, '0'), padStart(date.getDate(), 2, '0')].join('-');
 
 // * ================================================================================ getTimeMark core function
 
