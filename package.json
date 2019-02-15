@@ -1,6 +1,6 @@
 {
   "name": "timemark",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "a tool for humanizing time",
   "main": "index.js",
   "scripts": {
