@@ -10,18 +10,18 @@ describe('test timemark', () => {
   it('test Date is null', () => {
     const name: any = 'dadad';
     const data = timemark(name);
-    expect(data).toBe('NaN-NaN-NaN');
+    expect(data).toBe('NaN-NaN');
   });
 
   it('test Date is 0', () => {
     const data = timemark(0);
-    expect(data).toBe('1970-01-01');
+    expect(data).toBe('01-01');
   });
 
   it('test Date is string', () => {
     const name: any = '2009-10-20';
     const data = timemark(name);
-    expect(data).toBe('2009-10-20');
+    expect(data).toBe('10-20');
   });
 
   it('test time list', () => {
@@ -39,6 +39,6 @@ describe('test timemark', () => {
       timemark(time + -2 * 86400 * 1000, 1548826417000),
       timemark(time + 8 * 86400 * 1000, 1548826417000),
     ];
-    expect(timeList).toEqual(['2019-01-28', '2019-02-07']);
+    expect(timeList).toEqual(['01-28', '02-07']);
   });
 });
